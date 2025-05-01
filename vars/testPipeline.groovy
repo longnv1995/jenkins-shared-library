@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+import src.org.longnv.helpers.buildNotifyChannel
+
 def call(Map config = [:]) {
   def cronSchedule = config.cronSchedule ?: null
   def testCommand = config.testCommand ?: 'test'
