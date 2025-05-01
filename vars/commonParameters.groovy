@@ -6,11 +6,6 @@ import org.longnv.pipeline.Environment
 
 def call(Map config = [:]) {
   return [
-    booleanParam(
-      name: 'Notify me',
-      defaultValue: true,
-      description: 'Get notification via slackbot if you selected this option'
-    ),
     string(
       name: 'TEST_BRANCH',
       defaultValue: config.testBranch ?: 'main',

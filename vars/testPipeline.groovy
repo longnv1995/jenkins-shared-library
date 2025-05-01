@@ -21,7 +21,6 @@ def call(Map config = [:]) {
     }
 
     environment {
-      NOTIFY_ME = "${params['notify me']}"
       TEST_BRANCH = "${params.TEST_BRANCH}"
       TEST_TYPE = "${params.TEST_TYPE}"
       TEST_ENV = "${params.TEST_ENV}"
@@ -33,7 +32,6 @@ def call(Map config = [:]) {
       stage('Build started') {
         steps {
           script {
-            def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},Slackbot" : env.SLACK_CHANNEL
             def slackParams = [
               'Test branch': env.TEST_BRANCH,
               'Test type': env.TEST_TYPE,
@@ -42,7 +40,7 @@ def call(Map config = [:]) {
             ]
 
             notifySlack.pipelineStart(
-              channel: notifyChannel,
+              channel: env.SLACK_CHANNEL,
               additionalParams: slackParams
             )
           }
@@ -77,14 +75,12 @@ def call(Map config = [:]) {
     post {
       success {
         script {
-          def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},${env.NOTIFY_ME}" : env.SLACK_CHANNEL
-          notifySlack.pipelineSuccess(channel: notifyChannel)
+          notifySlack.pipelineSuccess(channel: env.SLACK_CHANNEL)
         }
       }
 
       failure {
         script {
-          def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},${env.NOTIFY_ME}" : env.SLACK_CHANNEL
           notifySlack.pipelineFailure(channel: env.SLACK_CHANNEL)
         }
       }
