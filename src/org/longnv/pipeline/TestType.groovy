@@ -1,4 +1,4 @@
-package org.longnv.jenkins
+package org.longnv.pipeline
 
 class TestType {
   static final String E2E_TEST = 'e2e-test'

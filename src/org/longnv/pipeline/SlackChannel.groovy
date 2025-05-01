@@ -1,4 +1,4 @@
-package org.longnv.jenkins
+package org.longnv.pipeline
 
 class SlackChannel {
   static final String SCHEDULED_TESTS_PRODTEST = '#scheduled-tests-prodtest'

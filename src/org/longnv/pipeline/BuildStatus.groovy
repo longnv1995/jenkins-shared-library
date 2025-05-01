@@ -1,4 +1,4 @@
-package org.longnv.jenkins
+package org.longnv.pipeline
 
 class BuildStatus {
   static final String SUCCESS = 'SUCCESS'

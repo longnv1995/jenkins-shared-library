@@ -1,8 +1,8 @@
 #!/usr/bin/env groovy
 
-import org.longnv.jenkins.TestType
-import org.longnv.jenkins.SlackChannel
-import org.longnv.jenkins.Environment
+import org.longnv.pipeline.TestType
+import org.longnv.pipeline.SlackChannel
+import org.longnv.pipeline.Environment
 
 def call(Map config = [:]) {
   return [

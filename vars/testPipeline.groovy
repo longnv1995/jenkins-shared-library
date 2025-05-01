@@ -1,7 +1,5 @@
 #!/usr/bin/env groovy
 
-import src.org.longnv.helpers.buildNotifyChannel
-
 def call(Map config = [:]) {
   def cronSchedule = config.cronSchedule ?: null
   def testCommand = config.testCommand ?: 'test'
@@ -35,7 +33,7 @@ def call(Map config = [:]) {
       stage('Build started') {
         steps {
           script {
-            def notifyChannel = buildNotifyChannel()
+            def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},${env.NOTIFY_ME}" : env.SLACK_CHANNEL
             def slackParams = [
               'Test branch': env.TEST_BRANCH,
               'Test type': env.TEST_TYPE,
@@ -79,14 +77,14 @@ def call(Map config = [:]) {
     post {
       success {
         script {
-          def notifyChannel = buildNotifyChannel()
+          def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},${env.NOTIFY_ME}" : env.SLACK_CHANNEL
           notifySlack.pipelineSuccess(channel: notifyChannel)
         }
       }
 
       failure {
         script {
-          def notifyChannel = buildNotifyChannel()
+          def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},${env.NOTIFY_ME}" : env.SLACK_CHANNEL
           notifySlack.pipelineFailure(channel: env.SLACK_CHANNEL)
         }
       }

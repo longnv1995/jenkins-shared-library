@@ -1,4 +1,4 @@
-package org.longnv.jenkins
+package org.longnv.pipeline
 
 class Environment {
   static final String DEVELOPMENT = 'development'

@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
-import org.longnv.jenkins.SlackChannel
-import org.longnv.jenkins.BuildStatus
+import org.longnv.pipeline.SlackChannel
+import org.longnv.pipeline.BuildStatus
 
 def pipelineStart(Map config = [:]) {
   String channel = config.channel ?: SlackChannel.JENKINS_TESTS_PRODTEST
