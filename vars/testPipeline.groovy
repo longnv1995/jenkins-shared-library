@@ -1,11 +1,13 @@
 #!/usr/bin/env groovy
 
 def call(Map config = [:]) {
+  def cronSchedule = config.cronSchedule ?: null
+  def testCommand = config.testCommand ?: 'test'
   def propertiesList = [
     parameters(commonParameters(config))
   ]
   
-  if (config.cronSchedule) {
+  if (cronSchedule) {
     propertiesList << pipelineTriggers([cron(config.cronSchedule)])
   }
 
@@ -19,7 +21,8 @@ def call(Map config = [:]) {
     }
 
     environment {
-      TES_BRANCH = "${params.TES_BRANCH}"
+      NOTIFY_ME = "${params.NOTIFY_ME}"
+      TEST_BRANCH = "${params.TEST_BRANCH}"
       TEST_TYPE = "${params.TEST_TYPE}"
       TEST_ENV = "${params.TEST_ENV}"
       WORKERS = "${params.WORKERS}"
@@ -30,14 +33,17 @@ def call(Map config = [:]) {
       stage('Build started') {
         steps {
           script {
+            def notifyChannel = buildNotifyChannel()
+            def slackParams = [
+              'Test branch': env.TEST_BRANCH,
+              'Test type': env.TEST_TYPE,
+              'Test environment': env.TEST_ENV,
+              'Workers': env.WORKERS,
+            ]
+
             notifySlack.pipelineStart(
-              channel: env.SLACK_CHANNEL,
-              additionalParams: [
-                'Test branch': env.TEST_BRANCH,
-                'Test type': env.TEST_TYPE,
-                'Test environment': env.TEST_ENV,
-                'Workers': env.WORKERS,
-              ]
+              channel: notifyChannel,
+              additionalParams: slackParams
             )
           }
         }
@@ -62,22 +68,24 @@ def call(Map config = [:]) {
       stage('Run Tests') {
         steps {
           script {
-            commonStages.runTests(config.testCommand ?: 'test')
+            commonStages.runTests(testCommand)
           }
         }
       }
     }
 
     post {
+      def notifyChannel = buildNotifyChannel()
+
       success {
         script {
-          notifySlack.pipelineSuccess(channel: SLACK_CHANNEL)
+          notifySlack.pipelineSuccess(channel: notifyChannel)
         }
       }
 
       failure {
         script {
-          notifySlack.pipelineFailure(channel: SLACK_CHANNEL)
+          notifySlack.pipelineFailure(channel: env.SLACK_CHANNEL)
         }
       }
 
