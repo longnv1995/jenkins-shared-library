@@ -33,7 +33,7 @@ def call(Map config = [:]) {
       stage('Build started') {
         steps {
           script {
-            def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},@slackbot" : env.SLACK_CHANNEL
+            def notifyChannel = env.NOTIFY_ME ? "${env.SLACK_CHANNEL},Slackbot" : env.SLACK_CHANNEL
             def slackParams = [
               'Test branch': env.TEST_BRANCH,
               'Test type': env.TEST_TYPE,
