@@ -21,7 +21,7 @@ def call(Map config = [:]) {
     }
 
     environment {
-      NOTIFY_ME = "${params.NOTIFY_ME}"
+      NOTIFY_ME = "${params['notify me']}"
       TEST_BRANCH = "${params.TEST_BRANCH}"
       TEST_TYPE = "${params.TEST_TYPE}"
       TEST_ENV = "${params.TEST_ENV}"
