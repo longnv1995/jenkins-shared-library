@@ -75,16 +75,16 @@ def call(Map config = [:]) {
     }
 
     post {
-      def notifyChannel = buildNotifyChannel()
-
       success {
         script {
+          def notifyChannel = buildNotifyChannel()
           notifySlack.pipelineSuccess(channel: notifyChannel)
         }
       }
 
       failure {
         script {
+          def notifyChannel = buildNotifyChannel()
           notifySlack.pipelineFailure(channel: env.SLACK_CHANNEL)
         }
       }
